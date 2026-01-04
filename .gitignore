@@ -1,0 +1,19 @@
+# Godot
+.godot/
+*.tmp
+*.import
+
+# Saves
+saves/
+*.save
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
