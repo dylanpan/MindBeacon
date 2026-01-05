@@ -1,0 +1,61 @@
+[gd_scene load_steps=3 format=3 uid="uid://b3q4h8x7j2k1m"]
+
+[ext_resource type="Script" path="res://scripts/world/WorldLayerManager.gd" id="1"]
+
+[node name="WorldLayerManager" type="Node2D"]
+script = ExtResource("1")
+
+[node name="WorldContainer" type="Node2D" parent="."]
+
+[node name="RealityLayer" type="CanvasLayer" parent="WorldContainer"]
+layer = 0
+
+[node name="MentalLayer" type="CanvasLayer" parent="WorldContainer"]
+layer = 1
+
+[node name="MemoryLayer" type="CanvasLayer" parent="WorldContainer"]
+layer = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+
+[node name="WorldTransitionAnimation" type="Animation" id="2"]
+length = 2.0
+
+[sub_resource type="Animation" id="1"]
+resource_name = "world_switch"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("WorldContainer/RealityLayer:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("WorldContainer/MentalLayer:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(1, 2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[resource]
+script/source = "extends Animation
+var world_from = 0
+var world_to = 1
+
+func set_transition(from: int, to: int):
+    world_from = from
+    world_to = to
+    # 这里可以动态调整动画轨道
+"
