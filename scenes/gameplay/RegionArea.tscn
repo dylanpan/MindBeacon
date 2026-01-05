@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://d4e5f6g7h8i9j0k1"]
+
+[ext_resource type="Script" path="res://scripts/gameplay/RegionArea.gd" id="1_l2m3n4"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5o6p7"]
+size = Vector2(200, 200)
+
+[node name="RegionArea" type="Area2D"]
+script = ExtResource("1_l2m3n4")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_5o6p7")
+
+[node name="UpdateTimer" type="Timer" parent="."]
+wait_time = 5.0
+autostart = true

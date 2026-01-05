@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="Personality" load_steps=2 format=3 uid="uid://g3h4i5j6k7l8m9n0"]
+
+[ext_resource type="Script" path="res://scripts/core/Personality.gd" id="1_o2p3q4"]
+
+[resource]
+script = ExtResource("1_o2p3q4")
+mbti_e_i = 0.5
+mbti_s_n = 0.5
+mbti_t_f = 0.5
+mbti_j_p = 0.5
+big5_openness = 50
+big5_conscientiousness = 50
+big5_extraversion = 50
+big5_agreeableness = 50
+big5_neuroticism = 50
+mental_health = 50.0

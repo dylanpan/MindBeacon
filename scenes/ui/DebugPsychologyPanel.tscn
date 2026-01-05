@@ -1,0 +1,55 @@
+[gd_scene load_steps=3 format=3 uid="uid://f0g1h2i3j4k5l6m7"]
+
+[ext_resource type="Script" path="res://scripts/utils/DebugPsychology.gd" id="1_n8o9p0"]
+[ext_resource type="Theme" uid="uid://p8q9r0s1t2u3v4w5" path="res://assets/ui/themes/main_theme.tres" id="2_q1r2s3"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4t5u6"]
+bg_color = Color(0.15, 0.15, 0.2, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.4, 0.4, 0.6, 1)
+
+[node name="DebugPsychologyPanel" type="Panel"]
+offset_left = 100.0
+offset_top = 100.0
+offset_right = 500.0
+offset_bottom = 400.0
+theme = ExtResource("2_q1r2s3")
+theme_override_styles/panel = SubResource("StyleBoxFlat_4t5u6")
+script = ExtResource("1_n8o9p0")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 8
+
+[node name="TitleLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "心理系统调试面板"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 16
+
+[node name="RandomizeButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "随机人格参数"
+
+[node name="HighMoodButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "强制高氛围模式"
+
+[node name="StatusLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "MBTI: N/A
+心理健康: 0.0
+城市氛围: 0.00"
+autowrap_mode = 3
+
+[node name="CloseButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "关闭"

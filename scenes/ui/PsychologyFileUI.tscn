@@ -1,0 +1,97 @@
+[gd_scene load_steps=4 format=3 uid="uid://e7f8g9h0i1j2k3l4"]
+
+[ext_resource type="Script" path="res://scripts/ui/PsychologyFileUI.gd" id="1_m5n6o7"]
+[ext_resource type="Theme" uid="uid://p8q9r0s1t2u3v4w5" path="res://assets/ui/themes/main_theme.tres" id="2_x6y7z8"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_9a0b1"]
+bg_color = Color(0.1, 0.1, 0.15, 0.9)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.3, 0.3, 0.4, 1)
+
+[node name="PsychologyFileUI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_m5n6o7")
+theme = ExtResource("2_x6y7z8")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -150.0
+offset_right = 200.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_9a0b1")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
+
+[node name="TitleLabel" type="Label" parent="Panel/VBoxContainer"]
+layout_mode = 2
+text = "心理档案"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 20
+
+[node name="OpennessBar" type="ProgressBar" parent="Panel/VBoxContainer"]
+layout_mode = 2
+max_value = 100.0
+value = 50.0
+show_percentage = false
+metadata/_label = "开放性"
+
+[node name="ConscientiousnessBar" type="ProgressBar" parent="Panel/VBoxContainer"]
+layout_mode = 2
+max_value = 100.0
+value = 50.0
+show_percentage = false
+metadata/_label = "尽责性"
+
+[node name="ExtraversionBar" type="ProgressBar" parent="Panel/VBoxContainer"]
+layout_mode = 2
+max_value = 100.0
+value = 50.0
+show_percentage = false
+metadata/_label = "外向性"
+
+[node name="AgreeablenessBar" type="ProgressBar" parent="Panel/VBoxContainer"]
+layout_mode = 2
+max_value = 100.0
+value = 50.0
+show_percentage = false
+metadata/_label = "宜人性"
+
+[node name="NeuroticismBar" type="ProgressBar" parent="Panel/VBoxContainer"]
+layout_mode = 2
+max_value = 100.0
+value = 50.0
+show_percentage = false
+metadata/_label = "神经质"
+
+[node name="MBTITypeLabel" type="Label" parent="Panel/VBoxContainer"]
+layout_mode = 2
+text = "MBTI类型: ENFP"
+horizontal_alignment = 1
+
+[node name="MentalHealthLabel" type="Label" parent="Panel/VBoxContainer"]
+layout_mode = 2
+text = "心理健康: 75.0%"
+horizontal_alignment = 1
