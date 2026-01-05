@@ -109,6 +109,7 @@ ASMR级环境音 + 心理学相关音律彩蛋
 
 ### 更新内容
 #### 项目结构规划
+```javascript
 MindBeacon/
 ├── project.godot              # Godot项目配置
 ├── assets/                    # 资源文件夹
@@ -130,6 +131,7 @@ MindBeacon/
 │   ├── configs/              # 配置文件
 │   └── saves/                # 存档文件
 └── docs/                      # 文档
+```
 
 #### __模块1: 核心游戏系统 (Core Systems)__
 
