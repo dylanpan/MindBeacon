@@ -170,26 +170,17 @@ __补充实现细节：__
 
 #### Git版本管理操作
 
-- __初始实现：__
-
-  - 创建功能分支：`git checkout -b feature/character-system`
-  - 提交核心脚本：`git add scripts/characters/ && git commit -m "Implement NPCManager and CharacterData"`
-
-- __UI开发：__
-
-  - 新建分支：`git checkout -b feature/healing-ui`
-  - 提交场景和脚本：`git add scenes/ui/HealingUI.tscn scripts/ui/HealingSystem.gd && git commit -m "Add healing UI components"`
-
-- __集成测试：__
-
-  - 合并分支：`git checkout main && git merge feature/character-system feature/healing-ui`
-  - 冲突解决：若有Resource引用冲突，手动编辑.tres文件
-  - 标签发布：`git tag v0.3-character-system`
-
-- __持续维护：__
-
-  - 平衡调整：创建hotfix分支修改Accessory参数
-  - 代码审查：推送到GitHub后创建PR，确保与其他系统（如心理系统）兼容
+  - 创建功能分支：`git add .`
+  - 提交核心脚本：`git commit -m "Implement character system with BehaviorTree AI
+    - Add BehaviorTree framework (BTNode, BTSelector, BTSequence, BTDecorator, BTCondition, BTAction)
+    - Implement NPCManager for dynamic NPC spawning and management
+    - Create CharacterData resource class for NPC attributes
+    - Add Accessory system for character modifications
+    - Implement HealingSystem with multiple healing methods
+    - Create HealingUI for player interaction
+    - Add BehaviorTreeRoot for tree execution management
+    - Include BTDebugger for development
+    - Add comprehensive BehaviorTree design documentation"`
 
 #### 文档更新
 
