@@ -2,6 +2,7 @@ extends Node
 
 # 状态枚举
 enum GameState {MAIN_MENU, PLAYING, PAUSED, GAME_OVER}
+enum WorldLayer {REAL, PSYCHOLOGICAL}  # 添加世界层枚举
 
 # 单例引用
 static var instance: GameManager
@@ -12,6 +13,15 @@ var offline_system: OfflineProgressSystem
 var state_machine: StateMachine
 
 var current_state: GameState
+var current_world_layer: WorldLayer = WorldLayer.REAL  # 当前世界层
+
+# 心理系统变量
+var player_personality: Personality
+var city_mood_index: float = 0.5  # 范围0.0-1.0
+var region_areas: Array = []  # 区域列表
+
+# 信号
+signal mood_index_changed(new_value: float)
 
 func _ready():
     instance = self
@@ -93,7 +103,10 @@ func _initialize_systems():
     if save_system:
         save_system.load_game()
 
-    # 3. 计算离线收益
+    # 3. 初始化心理系统
+    initialize_psychology_system()
+
+    # 4. 计算离线收益
     if offline_system:
         var offline_result = offline_system.calculate_offline_progress(_get_offline_time())
         if offline_result.progress > 0:
@@ -101,11 +114,11 @@ func _initialize_systems():
             if save_system:
                 save_system.save_game()  # 立即保存
 
-    # 4. 设置自动保存
+    # 5. 设置自动保存
     if save_system:
         save_system.setup_auto_save()
 
-    # 5. 进入初始状态
+    # 6. 进入初始状态
     change_game_state(GameState.MAIN_MENU)
 
 func _get_offline_time() -> float:
@@ -146,3 +159,30 @@ func _check_performance():
 
 func _on_game_state_changed(new_state):
     print("Game state changed to: ", new_state)
+
+# 心理系统方法
+func initialize_psychology_system():
+    # 加载默认人格模板
+    player_personality = load("res://data/configs/default_personality.tres")
+    if not player_personality:
+        player_personality = Personality.new()
+
+    # 初始化MentalEnergySystem对象池（如果存在）
+    if has_node("/root/MentalEnergyPool"):
+        var pool = get_node("/root/MentalEnergyPool")
+        if pool.has_method("initialize_pool"):
+            pool.initialize_pool(100)
+
+func update_city_mood_index(new_value: float):
+    var old_value = city_mood_index
+    city_mood_index = clamp(new_value, 0.0, 1.0)
+
+    if abs(city_mood_index - old_value) > 0.01:  # 避免频繁更新
+        mood_index_changed.emit(city_mood_index)
+        # 触发氛围过渡效果
+        apply_mood_transition(old_value, city_mood_index)
+
+func apply_mood_transition(old_value: float, new_value: float):
+    var tween = create_tween()
+    tween.tween_property(self, "city_mood_index", new_value, 2.0)
+    tween.tween_callback(func(): EventBus.emit_signal("mood_transition_complete"))
