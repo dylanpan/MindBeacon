@@ -1,15 +1,15 @@
 extends Control
 
 @onready var big5_bars: Dictionary = {
-    "openness": $VBoxContainer/OpennessBar,
-    "conscientiousness": $VBoxContainer/ConscientiousnessBar,
-    "extraversion": $VBoxContainer/ExtraversionBar,
-    "agreeableness": $VBoxContainer/AgreeablenessBar,
-    "neuroticism": $VBoxContainer/NeuroticismBar
+    "openness": $Panel/ScrollContainer/VBoxContainer/OpennessBar,
+    "conscientiousness": $Panel/ScrollContainer/VBoxContainer/ConscientiousnessBar,
+    "extraversion": $Panel/ScrollContainer/VBoxContainer/ExtraversionBar,
+    "agreeableness": $Panel/ScrollContainer/VBoxContainer/AgreeablenessBar,
+    "neuroticism": $Panel/ScrollContainer/VBoxContainer/NeuroticismBar
 }
 
-@onready var mbti_type_label: Label = $VBoxContainer/MBTITypeLabel
-@onready var mental_health_label: Label = $VBoxContainer/MentalHealthLabel
+@onready var mbti_type_label: Label = $Panel/ScrollContainer/VBoxContainer/MBTITypeLabel
+@onready var mental_health_label: Label = $Panel/ScrollContainer/VBoxContainer/MentalHealthLabel
 
 func _ready():
     if GameManager.instance and GameManager.instance.player_personality:
