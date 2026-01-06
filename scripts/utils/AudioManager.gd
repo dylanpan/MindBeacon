@@ -1,29 +1,36 @@
 extends Node
 
-var music_player: AudioStreamPlayer
-var sfx_players: Array = []
+@onready var layered_music = $LayeredMusicSystem
+@onready var sfx_manager = $SFXManager
 
 func _ready():
-    music_player = AudioStreamPlayer.new()
-    add_child(music_player)
+    # 设置为单例
+    if get_parent() == get_tree().root:
+        # 自动初始化音频总线
+        _setup_audio_buses()
 
-    # 创建音效播放器池
-    for i in range(5):
-        var player = AudioStreamPlayer.new()
-        sfx_players.append(player)
-        add_child(player)
+func _setup_audio_buses():
+    # 创建音频总线
+    if AudioServer.get_bus_index("Music") == -1:
+        AudioServer.add_bus()
+        AudioServer.set_bus_name(AudioServer.bus_count - 1, "Music")
 
-func play_music(stream: AudioStream):
-    music_player.stream = stream
-    music_player.play()
+    if AudioServer.get_bus_index("SFX") == -1:
+        AudioServer.add_bus()
+        AudioServer.set_bus_name(AudioServer.bus_count - 1, "SFX")
 
-func play_sfx(stream: AudioStream, volume_db: float = 0.0):
-    for player in sfx_players:
-        if not player.playing:
-            player.stream = stream
-            player.volume_db = volume_db
-            player.play()
-            break
+    # 创建音乐子总线
+    if AudioServer.get_bus_index("Music/Ambient") == -1:
+        AudioServer.add_bus()
+        AudioServer.set_bus_name(AudioServer.bus_count - 1, "Music/Ambient")
+        AudioServer.set_bus_send(AudioServer.bus_count - 1, "Music")
 
-func stop_music():
-    music_player.stop()
+    if AudioServer.get_bus_index("Music/Melody") == -1:
+        AudioServer.add_bus()
+        AudioServer.set_bus_name(AudioServer.bus_count - 1, "Music/Melody")
+        AudioServer.set_bus_send(AudioServer.bus_count - 1, "Music")
+
+    if AudioServer.get_bus_index("Music/Percussion") == -1:
+        AudioServer.add_bus()
+        AudioServer.set_bus_name(AudioServer.bus_count - 1, "Music/Percussion")
+        AudioServer.set_bus_send(AudioServer.bus_count - 1, "Music")
