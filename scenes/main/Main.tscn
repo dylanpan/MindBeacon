@@ -1,8 +1,12 @@
-[gd_scene load_steps=1 format=3 uid="uid://bqh8x8m8x8x8x"]
+[gd_scene load_steps=2 format=3 uid="uid://bqh8x8m8x8x8x"]
+
+[ext_resource type="PackedScene" uid="uid://uIManager" path="res://scenes/ui/UIManager.tscn" id="1"]
 
 [node name="Main" type="Node2D"]
 
 [node name="UI" type="CanvasLayer" parent="."]
+
+[node name="UIManager" parent="UI" instance=ExtResource("1")]
 
 [node name="GameWorld" type="Node2D" parent="."]
 

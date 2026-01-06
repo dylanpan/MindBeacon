@@ -99,14 +99,17 @@ func _initialize_systems():
     # 1. 初始化事件总线
     EventBus.connect_signals()
 
-    # 2. 加载存档系统
+    # 2. 初始化UI管理器
+    _initialize_ui_manager()
+
+    # 3. 加载存档系统
     if save_system:
         save_system.load_game()
 
-    # 3. 初始化心理系统
+    # 4. 初始化心理系统
     initialize_psychology_system()
 
-    # 4. 计算离线收益
+    # 5. 计算离线收益
     if offline_system:
         var offline_result = offline_system.calculate_offline_progress(_get_offline_time())
         if offline_result.progress > 0:
@@ -114,11 +117,11 @@ func _initialize_systems():
             if save_system:
                 save_system.save_game()  # 立即保存
 
-    # 5. 设置自动保存
+    # 6. 设置自动保存
     if save_system:
         save_system.setup_auto_save()
 
-    # 6. 进入初始状态
+    # 7. 进入初始状态
     change_game_state(GameState.MAIN_MENU)
 
 func _get_offline_time() -> float:
@@ -131,17 +134,16 @@ func _get_offline_time() -> float:
     return 0.0
 
 func _apply_offline_progress(result: Dictionary):
-    # 显示离线收益UI
-    var ui_scene = load("res://scenes/ui/OfflineProgressUI.tscn")
-    if ui_scene:
-        var ui = ui_scene.instantiate()
-        ui.set_progress_data(result)
-        add_child(ui)
+    # 使用UIManager显示离线收益UI
+    if UIManager.instance:
+        UIManager.instance.show_offline_progress({
+            "progress_data": result
+        })
 
         # 应用收益到游戏状态（暂时注释，需要实际的玩家数据管理）
         # player_stats.add_energy(result.progress)
     else:
-        print("OfflineProgressUI scene not found")
+        print("UIManager not available")
 
 func _setup_performance_monitoring():
     var timer = Timer.new()
@@ -186,3 +188,13 @@ func apply_mood_transition(old_value: float, new_value: float):
     var tween = create_tween()
     tween.tween_property(self, "city_mood_index", new_value, 2.0)
     tween.tween_callback(func(): EventBus.emit_signal("mood_transition_complete"))
+
+func _initialize_ui_manager():
+    """初始化UI管理器"""
+    # UIManager已在Main.tscn中实例化，这里获取引用
+    var ui_manager = get_node("/root/Main/UI/UIManager")
+    if ui_manager and ui_manager is UIManager:
+        # UIManager已在_ready()中初始化，这里可以添加额外配置
+        pass
+    else:
+        push_warning("UIManager not found or not properly configured")

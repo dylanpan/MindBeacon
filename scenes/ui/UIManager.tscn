@@ -1,0 +1,31 @@
+[gd_scene load_steps=4 format=3 uid="uid://uIManager"]
+
+[ext_resource type="Script" path="res://scripts/ui/UIManager.gd" id="1"]
+[ext_resource type="Theme" path="res://assets/ui/themes/MainTheme.tres" id="2"]
+
+[sub_resource type="GDScript" id="GDScript_tooltip"]
+script/source = "extends Panel
+
+var lifetime: float = 2.0
+var fade_time: float = 0.5
+
+func _ready():
+    modulate.a = 0.0
+    var tween = create_tween()
+    tween.tween_property(self, \"modulate:a\", 1.0, fade_time)
+    
+    # 设置自动销毁
+    get_tree().create_timer(lifetime).timeout.connect(_start_fade_out)
+
+func _start_fade_out():
+    var tween = create_tween()
+    tween.tween_property(self, \"modulate:a\", 0.0, fade_time)
+    tween.tween_callback(queue_free)
+"
+
+[node name="UIManager" type="CanvasLayer"]
+layer = 10
+script = ExtResource("1")
+default_theme = ExtResource("2")
+enable_sound_effects = true
+enable_tooltips = true
