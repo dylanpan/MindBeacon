@@ -110,17 +110,20 @@ func _check_usage_conditions(player: Node2D) -> bool:
 # 激活传送门
 func _activate_portal(player: Node2D):
 	last_use_time = Time.get_time_dict_from_system()["hour"] * 3600 + Time.get_time_dict_from_system()["minute"] * 60 + Time.get_time_dict_from_system()["second"]
-	
+
 	# 消耗能量
 	if required_energy > 0:
 		MentalEnergyPool.consume_energy(required_energy)
-	
+
 	# 播放激活效果
 	_play_activation_effect()
-	
+
+	# 播放音频
+	_audio_play()
+
 	# 发送激活信号
 	portal_activated.emit(self, player)
-	
+
 	# 开始冷却
 	cooldown_timer.start(cooldown_time)
 
@@ -188,6 +191,19 @@ func get_portal_info() -> Dictionary:
 		"active": is_active,
 		"cooldown_remaining": cooldown_timer.time_left if not cooldown_timer.is_stopped() else 0.0
 	}
+
+# 播放音频
+func _audio_play():
+	var sfx_type = "portal_enter"
+	if target_world_id == 1:  # physical界
+		sfx_type = "portal_physical"
+	elif target_world_id == 2:  # mental界
+		sfx_type = "portal_mental"
+	else:
+		sfx_type = "portal_enter"
+
+	if AudioManager and AudioManager.sfx_manager:
+		AudioManager.sfx_manager.play_sfx(sfx_type, global_position)
 
 # 更新视觉效果（基于状态）
 func _update_visuals():

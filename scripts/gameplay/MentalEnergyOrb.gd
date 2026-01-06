@@ -65,6 +65,9 @@ func collect_energy(player: Node2D):
         EnergyType.NEGATIVE:
             handle_negative_energy(energy_value)
 
+    # 播放收集音效
+    play_collection_audio()
+
     # 播放收集效果
     play_collection_effect()
 
@@ -99,6 +102,21 @@ func _on_decay_timeout():
         var tween = create_tween()
         tween.tween_property(sprite, "modulate:a", 0.0, 5.0)
         tween.tween_callback(queue_free)
+
+func play_collection_audio():
+    var volume_db = energy_value * 0.1  # 能量量级影响音量
+    var pitch_scale = 1.0
+
+    match energy_type:
+        EnergyType.POSITIVE:
+            pitch_scale = 1.0 + randf_range(0.0, 0.2)  # 高音调变体
+        EnergyType.NEGATIVE:
+            pitch_scale = 0.8 + randf_range(0.0, 0.2)  # 低音调变体
+
+    if AudioManager and AudioManager.sfx_manager:
+        AudioManager.sfx_manager.play_sfx("energy_collect", global_position, volume_db)
+        # 临时修改播放器的音调（如果SFXManager支持）
+        # 这里简化处理，实际可能需要扩展SFXManager以支持音调
 
 func check_attraction():
     # 检查是否应该吸引玩家

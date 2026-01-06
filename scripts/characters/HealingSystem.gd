@@ -28,20 +28,23 @@ func _ready():
 func start_healing(method: String, npc: Node2D, player: Node2D):
 	if not healing_methods.has(method) or is_healing:
 		return false
-	
+
 	current_method = method
 	npc_reference = npc
 	player_reference = player
 	healing_progress = 0.0
 	is_healing = true
-	
+
 	var speed = healing_methods[method]["speed"]
 	healing_timer.wait_time = 0.5 / speed  # Adjust tick rate based on method speed
 	healing_timer.start()
-	
+
+	# 开始治愈音乐
+	play_healing_music(npc)
+
 	healing_started.emit(method)
 	EventBus.emit_signal("healing_started", npc, method)
-	
+
 	return true
 
 func stop_healing(interrupt: bool = false):
@@ -78,6 +81,9 @@ func _on_healing_tick():
 		stop_healing(false)
 
 func apply_healing_effects():
+	# 播放治愈完成音效
+	play_healing_complete_audio()
+
 	if npc_reference and npc_reference.has_method("heal"):
 		npc_reference.heal(current_method)
 
@@ -92,3 +98,26 @@ func get_available_methods() -> Array:
 
 func get_method_description(method: String) -> String:
 	return healing_methods.get(method, {}).get("description", "")
+
+func play_healing_music(npc: Node2D):
+	# 基于NPC人格生成个性化治愈音乐
+	if AudioManager and AudioManager.layered_music:
+		var personality = npc.get_personality() if npc.has_method("get_personality") else null
+		var music_type = "calm"  # 默认
+
+		if personality:
+			var health = personality.mental_health
+			if health < 30:
+				music_type = "soothing"
+			elif health < 70:
+				music_type = "uplifting"
+			else:
+				music_type = "celebratory"
+
+		# 这里简化，实际可能需要扩展LayeredMusicSystem以支持治愈音乐模式
+		AudioManager.layered_music.switch_region_music(music_type)
+
+func play_healing_complete_audio():
+	# 播放治愈完成音效
+	if AudioManager and AudioManager.sfx_manager:
+		AudioManager.sfx_manager.play_sfx("healing_complete", Vector2.ZERO, 0.0)

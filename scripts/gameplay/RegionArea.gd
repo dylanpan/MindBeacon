@@ -27,13 +27,15 @@ func _on_body_entered(body: Node2D):
     if body.is_in_group("player"):
         if GameManager.instance:
             GameManager.instance.update_city_mood_index(region_mood)
+        # 触发区域音乐切换
+        switch_region_music()
         # 触发区域特效
         play_region_effect()
 
 func _on_body_exited(body: Node2D):
     if body.is_in_group("player"):
-        # 可选：离开区域时的处理
-        pass
+        # 淡出区域音乐
+        fade_out_region_music()
 
 func _on_update_timer_timeout():
     update_region_mood()
@@ -62,3 +64,27 @@ func play_region_effect():
     # 播放区域进入音效或视觉效果
     # TODO: 实现区域特效
     pass
+
+func switch_region_music():
+    var region_type = "default"
+    if region_mood < 0.3:
+        region_type = "dark"
+    elif region_mood < 0.7:
+        region_type = "neutral"
+    else:
+        region_type = "bright"
+
+    if AudioManager and AudioManager.layered_music:
+        AudioManager.layered_music.switch_region_music(region_type)
+
+func fade_out_region_music():
+    # 使用Tween淡出当前区域音乐
+    if AudioManager and AudioManager.layered_music:
+        var tween = create_tween()
+        tween.tween_property(AudioManager.layered_music, "volume_db", -60.0, 2.0)
+        tween.finished.connect(_on_music_fade_out_finished)
+
+func _on_music_fade_out_finished():
+    # 恢复默认音乐或停止
+    if AudioManager and AudioManager.layered_music:
+        AudioManager.layered_music.volume_db = 0.0
