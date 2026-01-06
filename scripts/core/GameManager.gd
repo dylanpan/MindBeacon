@@ -20,11 +20,16 @@ var player_personality: Personality
 var city_mood_index: float = 0.5  # 范围0.0-1.0
 var region_areas: Array = []  # 区域列表
 
+func _init():
+    # 初始化配置值
+    city_mood_index = ConfigManager.instance.get_float("system_config", "game_manager/default_city_mood", 0.5)
+
 # 信号
 signal mood_index_changed(new_value: float)
 
 func _ready():
     instance = self
+    _initialize_config_manager()  # 最先初始化配置管理器
     _initialize_subsystems()
     _initialize_state_machine()
     _connect_signals()
@@ -46,6 +51,14 @@ func switch_scene(scene_path: String):
     get_tree().change_scene_to_file(scene_path)
 
 # 私有方法
+func _initialize_config_manager():
+    var config_manager_node = ConfigManager.new()
+    config_manager_node.name = "ConfigManager"
+    add_child(config_manager_node)
+
+    # 等待配置加载完成
+    await config_manager_node._ready()
+
 func _initialize_subsystems():
     # 初始化子系统节点
     var save_system_node = SaveSystem.new()
@@ -148,7 +161,7 @@ func _apply_offline_progress(result: Dictionary):
 func _setup_performance_monitoring():
     var timer = Timer.new()
     timer.name = "PerformanceMonitor"
-    timer.wait_time = 60  # 每分钟检查一次
+    timer.wait_time = ConfigManager.instance.get_int("system_config", "game_manager/performance_monitor_interval", 60)  # 每分钟检查一次
     timer.connect("timeout", Callable(self, "_check_performance"))
     add_child(timer)
     timer.start()
@@ -173,20 +186,23 @@ func initialize_psychology_system():
     if has_node("/root/MentalEnergyPool"):
         var pool = get_node("/root/MentalEnergyPool")
         if pool.has_method("initialize_pool"):
-            pool.initialize_pool(100)
+            var pool_size = ConfigManager.instance.get_int("system_config", "game_manager/mental_energy_pool_size", 100)
+            pool.initialize_pool(pool_size)
 
 func update_city_mood_index(new_value: float):
     var old_value = city_mood_index
     city_mood_index = clamp(new_value, 0.0, 1.0)
 
-    if abs(city_mood_index - old_value) > 0.01:  # 避免频繁更新
+    var threshold = ConfigManager.instance.get_float("system_config", "game_manager/mood_change_threshold", 0.01)
+    if abs(city_mood_index - old_value) > threshold:  # 避免频繁更新
         mood_index_changed.emit(city_mood_index)
         # 触发氛围过渡效果
         apply_mood_transition(old_value, city_mood_index)
 
 func apply_mood_transition(old_value: float, new_value: float):
     var tween = create_tween()
-    tween.tween_property(self, "city_mood_index", new_value, 2.0)
+    var duration = ConfigManager.instance.get_float("system_config", "game_manager/mood_transition_duration", 2.0)
+    tween.tween_property(self, "city_mood_index", new_value, duration)
     tween.tween_callback(func(): EventBus.emit_signal("mood_transition_complete"))
 
 func _initialize_ui_manager():

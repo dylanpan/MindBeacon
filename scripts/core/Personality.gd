@@ -48,6 +48,8 @@ func initialize_default_values():
     big5_agreeableness = 50
     big5_neuroticism = 50
 
+    mental_health = ConfigManager.instance.get_float("game_balance", "personality/default_mental_health", 50.0)
+
 func calculate_mental_health() -> float:
     # MBTI贡献：计算人格类型一致性得分
     var mbti_score = (mbti_e_i + mbti_s_n + mbti_t_f + mbti_j_p) / 4.0 * 100
@@ -58,8 +60,8 @@ func calculate_mental_health() -> float:
                    (100 - big5_neuroticism)) / 5.0
 
     # 复合计算：MBTI权重40% + Big5权重60%
-    const MBTI_WEIGHT = 0.4
-    const BIG5_WEIGHT = 0.6
+    const MBTI_WEIGHT = ConfigManager.instance.get_float("game_balance", "personality/mbti_weight", 0.4)
+    const BIG5_WEIGHT = ConfigManager.instance.get_float("game_balance", "personality/big5_weight", 0.6)
     mental_health = mbti_score * MBTI_WEIGHT + big5_avg * BIG5_WEIGHT
 
     # 应用环境修正因子
@@ -74,7 +76,7 @@ func get_environment_modifier() -> float:
     # 例如：心理空间给予正面修正
     var modifier = 1.0
     if GameManager.current_world_layer == WorldLayer.PSYCHOLOGICAL:
-        modifier = 1.2  # 心理空间给予20%加成
+        modifier = ConfigManager.instance.get_float("game_balance", "personality/psychological_modifier", 1.2)  # 心理空间给予20%加成
     return modifier
 
 func update_parameter(param_name: String, delta: float):
@@ -87,6 +89,11 @@ func update_parameter(param_name: String, delta: float):
     set(param_name, new_value)
     parameter_changed.emit(param_name, new_value)
     calculate_mental_health()  # 重新计算心理健康值
+
+    # 负面能量影响
+    if param_name == "big5_neuroticism":
+        # 这里可以根据配置调整负面能量的影响强度
+        pass
 
 func get_mbti_type() -> String:
     var type = ""

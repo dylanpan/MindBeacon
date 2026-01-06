@@ -7,17 +7,20 @@ func _ready():
     pass
 
 func calculate_offline_progress(offline_seconds: float) -> Dictionary:
-    var offline_hours = min(offline_seconds / 3600.0, MAX_OFFLINE_HOURS)
+    var max_offline_hours = ConfigManager.instance.get_float("game_balance", "offline_progress/max_offline_hours", 24.0)
+    var offline_exponent = ConfigManager.instance.get_float("game_balance", "offline_progress/offline_exponent", 0.7)
+    var offline_hours = min(offline_seconds / 3600.0, max_offline_hours)
 
     # 获取基础收益和建筑效率
     var base_yield = _get_base_yield()
     var building_efficiency = _calculate_building_efficiency()
 
     # 分形算法计算
-    var raw_progress = base_yield * pow(offline_hours, OFFLINE_EXPONENT) * building_efficiency
+    var raw_progress = base_yield * pow(offline_hours, offline_exponent) * building_efficiency
 
     # 应用上限和衰减
-    var max_progress = base_yield * pow(MAX_OFFLINE_HOURS, OFFLINE_EXPONENT) * 2.0  # 2倍上限
+    var max_progress_multiplier = ConfigManager.instance.get_float("game_balance", "offline_progress/max_progress_multiplier", 2.0)
+    var max_progress = base_yield * pow(max_offline_hours, offline_exponent) * max_progress_multiplier
     var final_progress = min(raw_progress, max_progress)
 
     return {
@@ -41,7 +44,7 @@ func _get_base_yield() -> float:
     # 从存档系统获取基础收益
     if GameManager.instance and GameManager.instance.save_system:
         return GameManager.instance.save_system.get_player_stat("base_yield")
-    return 1.0  # 默认值
+    return ConfigManager.instance.get_float("game_balance", "offline_progress/default_base_yield", 1.0)  # 默认值
 
 func _get_buildings() -> Array:
     # 从存档系统获取建筑数据

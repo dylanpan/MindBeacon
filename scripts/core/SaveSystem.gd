@@ -120,7 +120,7 @@ func _on_save_completed(slot: int):
 func setup_auto_save():
     var timer = Timer.new()
     timer.name = "AutoSaveTimer"
-    timer.wait_time = 900  # 15分钟
+    timer.wait_time = ConfigManager.instance.get_int("system_config", "save_system/auto_save_interval", 900)  # 15分钟
     timer.one_shot = false
     timer.connect("timeout", Callable(self, "_on_auto_save_timeout"))
     add_child(timer)

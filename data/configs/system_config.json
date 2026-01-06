@@ -1,0 +1,17 @@
+{
+  "game_manager": {
+    "default_city_mood": 0.5,
+    "performance_monitor_interval": 60,
+    "mood_transition_duration": 2.0,
+    "mood_change_threshold": 0.01,
+    "mental_energy_pool_size": 100
+  },
+  "save_system": {
+    "save_version": 1,
+    "auto_save_interval": 900
+  },
+  "npc_manager": {
+    "max_npcs_per_region": 10,
+    "total_max_npcs": 50
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "portal": {
+    "cooldown_time": 2.0,
+    "default_energy_requirement": 0.0,
+    "portal_radius": 32.0,
+    "particle_amount": 20,
+    "particle_lifetime": 0.5,
+    "emission_radius": 16.0,
+    "spread_angle": 45.0,
+    "initial_velocity_min": 50.0,
+    "initial_velocity_max": 100.0
+  },
+  "event_emitter": {
+    "trigger_radius": 50.0,
+    "cooldown_time": 10.0
+  },
+  "region_area": {
+    "update_interval": 5.0,
+    "default_mood": 0.5,
+    "mood_dark_threshold": 0.3,
+    "mood_neutral_threshold": 0.7
+  },
+  "area_unlock": {
+    "check_interval": 1.0,
+    "default_difficulty_curve": 1.0
+  }
+}

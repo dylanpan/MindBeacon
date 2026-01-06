@@ -1,0 +1,13 @@
+{
+  "animation": {
+    "transition_duration": 1.0,
+    "animation_duration": 0.3,
+    "tooltip_delay": 2.0,
+    "emotion_menu_radius": 80.0
+  },
+  "ui_management": {
+    "max_pool_size": 5,
+    "healing_ui_offset": 50,
+    "ui_z_index_increment": 1
+  }
+}

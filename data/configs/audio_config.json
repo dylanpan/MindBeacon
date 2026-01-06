@@ -1,0 +1,13 @@
+{
+  "music": {
+    "volume_min": -60.0,
+    "volume_max": 0.0,
+    "pitch_energy_base": 0.8,
+    "pitch_energy_scale": 0.4
+  },
+  "sfx": {
+    "pool_size_high_end": 10,
+    "pool_size_low_end": 5,
+    "volume_randomization": 6.0
+  }
+}

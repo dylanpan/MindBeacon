@@ -1,0 +1,29 @@
+{
+  "mental_energy": {
+    "attraction_range": 100.0,
+    "decay_time": 30.0,
+    "default_energy_value": 10.0,
+    "attraction_speed": 50.0,
+    "volume_scale": 0.1,
+    "pitch_positive_min": 1.0,
+    "pitch_positive_max": 1.2,
+    "pitch_negative_min": 0.8,
+    "pitch_negative_max": 1.0
+  },
+  "personality": {
+    "mbti_weight": 0.4,
+    "big5_weight": 0.6,
+    "default_mental_health": 50.0,
+    "psychological_modifier": 1.2,
+    "neuroticism_impact": 0.1
+  },
+  "offline_progress": {
+    "max_offline_hours": 24.0,
+    "offline_exponent": 0.7,
+    "max_progress_multiplier": 2.0,
+    "default_base_yield": 1.0
+  },
+  "mental_energy_pool": {
+    "pool_size": 100
+  }
+}
